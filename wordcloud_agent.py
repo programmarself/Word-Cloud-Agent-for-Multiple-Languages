@@ -32,22 +32,41 @@ def generate_wordcloud(text, language, mask=None):
 import urllib.request
 
 # Download Urdu font if not present
+# At the beginning of your script, after imports
 if not os.path.exists("NotoNastaliqUrdu-Regular.ttf"):
-    urllib.request.urlretrieve(
-        "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoNastaliqUrdu/NotoNastaliqUrdu-Regular.ttf",
-        "NotoNastaliqUrdu-Regular.ttf"
-    )
+    try:
+        urllib.request.urlretrieve(
+            "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoNastaliqUrdu/NotoNastaliqUrdu-Regular.ttf",
+            "NotoNastaliqUrdu-Regular.ttf"
+        )
+    except Exception as e:
+        st.warning(f"Could not download Urdu font: {str(e)}")
     
 # Set page config
 st.set_page_config(page_title="Multilingual Word Cloud Agent", layout="wide")
 
 # Language-specific settings
 LANGUAGE_CONFIG = {
-    'en': {'font': 'arial', 'reshaper': False},
-    'ur': {'font': 'NotoNastaliqUrdu-Regular.ttf', 'reshaper': True},
-    'ar': {'font': 'Arial Unicode MS', 'reshaper': True},
-    'ps': {'font': 'NotoNastaliqUrdu-Regular.ttf', 'reshaper': True},
-    'fa': {'font': 'Arial Unicode MS', 'reshaper': True}
+    'en': {
+        'font': 'Arial.ttf',  # Or any standard English font
+        'reshaper': False
+    },
+    'ur': {
+        'font': 'NotoNastaliqUrdu-Regular.ttf',
+        'reshaper': True
+    },
+    'ar': {
+        'font': 'Arial Unicode MS.ttf',
+        'reshaper': True
+    },
+    'ps': {
+        'font': 'NotoNastaliqUrdu-Regular.ttf',  # Pashto can use Urdu font
+        'reshaper': True
+    },
+    'fa': {
+        'font': 'Arial Unicode MS.ttf',  # Persian can use Arabic font
+        'reshaper': True
+    }
 }
 
 # Text cleaning functions
@@ -87,19 +106,32 @@ def process_text(text, language):
 
 def generate_wordcloud(text, language, mask=None):
     """Generate word cloud with language-specific settings"""
-    font_path = LANGUAGE_CONFIG[language]['NotoNastaliqUrdu-Regular.ttf']
-    
-    wordcloud = WordCloud(
-        font_path=font_path,
-        width=1200,
-        height=800,
-        background_color='white',
-        max_words=200,
-        mask=mask,
-        collocations=False
-    ).generate(text)
-    
-    return wordcloud
+    try:
+        # Get font path from config
+        font_path = LANGUAGE_CONFIG[language]['font']
+        
+        # Verify font exists or download it
+        if not os.path.exists(font_path) and language in ['ur', 'ps']:
+            urllib.request.urlretrieve(
+                "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoNastaliqUrdu/NotoNastaliqUrdu-Regular.ttf",
+                font_path
+            )
+        
+        wordcloud = WordCloud(
+            font_path=font_path,
+            width=1200,
+            height=800,
+            background_color='white',
+            max_words=200,
+            mask=mask,
+            collocations=False
+        ).generate(text)
+        
+        return wordcloud
+        
+    except Exception as e:
+        st.error(f"Failed to generate word cloud: {str(e)}")
+        return None
 
 # Streamlit UI
 st.title("🌍 Multilingual Word Cloud Agent")
