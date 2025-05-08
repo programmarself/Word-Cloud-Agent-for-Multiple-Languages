@@ -1,0 +1,2 @@
+[server]
+maxUploadSize = 200  # Increase if uploading large files
