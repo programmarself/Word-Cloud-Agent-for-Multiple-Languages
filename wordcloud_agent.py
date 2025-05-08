@@ -9,7 +9,15 @@ import re
 import numpy as np
 from PIL import Image
 import io
+import os
+import urllib.request
 
+# Download Urdu font if not present
+if not os.path.exists("NotoNastaliqUrdu-Regular.ttf"):
+    urllib.request.urlretrieve(
+        "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoNastaliqUrdu/NotoNastaliqUrdu-Regular.ttf",
+        "NotoNastaliqUrdu-Regular.ttf"
+    )
 # Set page config
 st.set_page_config(page_title="Multilingual Word Cloud Agent", layout="wide")
 
