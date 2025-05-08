@@ -26,8 +26,8 @@ LANGUAGE_CONFIG = {
     'en': {'font': 'arial', 'reshaper': False},
     'ur': {'font': 'NotoNastaliqUrdu-Regular.ttf', 'reshaper': True},
     'ar': {'font': 'Arial Unicode MS', 'reshaper': True},
-    'ps': {'font': 'NotoNastaliqUrdu-Regular.ttf', 'reshaper': True},  # Pashto often uses similar fonts to Urdu
-    'fa': {'font': 'Arial Unicode MS', 'reshaper': True}  # Persian
+    'ps': {'font': 'NotoNastaliqUrdu-Regular.ttf', 'reshaper': True},
+    'fa': {'font': 'Arial Unicode MS', 'reshaper': True}
 }
 
 # Text cleaning functions
