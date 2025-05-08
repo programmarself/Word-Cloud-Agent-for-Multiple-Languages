@@ -59,7 +59,7 @@ def process_text(text, language):
 
 def generate_wordcloud(text, language, mask=None):
     """Generate word cloud with language-specific settings"""
-    font_path = LANGUAGE_CONFIG[language]['font']
+    font_path = LANGUAGE_CONFIG[language]['NotoNastaliqUrdu-Regular.ttf']
     
     wordcloud = WordCloud(
         font_path=font_path,
