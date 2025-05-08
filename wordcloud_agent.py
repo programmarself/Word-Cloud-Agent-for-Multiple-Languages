@@ -13,11 +13,21 @@ import os
 import urllib.request
 
 # Download Urdu font if not present
-if not os.path.exists("NotoNastaliqUrdu-Regular.ttf"):
-    urllib.request.urlretrieve(
-        "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoNastaliqUrdu/NotoNastaliqUrdu-Regular.ttf",
-        "NotoNastaliqUrdu-Regular.ttf"
-    )
+def generate_wordcloud(text, language, mask=None):
+    """Generate word cloud with language-specific settings"""
+    font_path = LANGUAGE_CONFIG[language]['font']  # Correct way to access the font
+    
+    wordcloud = WordCloud(
+        font_path=font_path,
+        width=1200,
+        height=800,
+        background_color='white',
+        max_words=200,
+        mask=mask,
+        collocations=False
+    ).generate(text)
+    
+    return wordcloud
 # Set page config
 st.set_page_config(page_title="Multilingual Word Cloud Agent", layout="wide")
 
